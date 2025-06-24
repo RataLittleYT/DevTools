@@ -3,937 +3,639 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dev Tools By CachorroMx</title>
+    <title>Dev Tools By RataLife</title>
     <link rel="icon" type="image/url" href="https://i.ibb.co/MkPG8r4f/xd.png">
     <style>
-        body {
-    display: flex;
-    flex-direction: column; /* Cambiamos a columna para apilar los contenedores */
-    justify-content: flex-start; /* Alineamos al inicio */
-    align-items: center;
-    min-height: 100vh; /* Aseguramos que el body ocupe al menos toda la pantalla */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        /* Estilos Generales */
+* {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: rgb(36, 0, 0);
-    background: linear-gradient(180deg, rgba(36, 0, 0, 1) 10%, rgb(92, 6, 6) 35%, rgb(0, 0, 0) 100%);
-    padding: 20px; /* Espacio alrededor del contenido */
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: rgb(36, 0, 36);
+    background: linear-gradient(180deg, rgba(36, 0, 36, 1) 10%, rgb(92, 6, 92) 35%, rgb(0, 0, 0) 100%);
+    padding: 20px;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    margin: 20px 0;
+    font-size: 2.5rem;
+    text-shadow: 0 0 10px rgba(187, 0, 255, 0.7);
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 5px rgba(187, 0, 255, 0.7); }
+    to { text-shadow: 0 0 15px rgba(187, 0, 255, 0.9), 0 0 20px rgba(187, 0, 255, 0.5); }
+}
+
+/* Contenedores de Convertidores */
 .converter-container {
     text-align: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
-    padding: 20px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px); /* Efecto de desenfoque */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Borde sutil */
-    margin-bottom: 20px; /* Espacio entre los contenedores */
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 25px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(187, 0, 255, 0.3);
+    margin-bottom: 40px;
     width: 100%;
-    max-width: 500px; /* Ancho máximo para que no se vea demasiado grande */
+    max-width: 600px;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: fadeInUp 0.8s forwards;
+    transition: all 0.5s ease;
+}
+
+.converter-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(187, 0, 255, 0.2);
+}
+
+@keyframes fadeInUp {
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .converter-container h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
     color: #ffffff;
+    position: relative;
+    padding-bottom: 10px;
 }
 
+.converter-container h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #bb00ff, transparent);
+    border-radius: 3px;
+}
+
+/* Grupos de Entrada */
 .input-group {
     display: flex;
     align-items: center;
-    margin: 10px 0;
+    margin: 15px 0;
+    position: relative;
 }
 
 .input-group input {
     width: 70%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 12px 15px;
+    border: 1px solid rgba(187, 0, 255, 0.3);
+    border-radius: 8px;
     margin-right: 10px;
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 16px;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #bb00ff;
+    box-shadow: 0 0 10px rgba(187, 0, 255, 0.5);
 }
 
 .input-group button {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     border: none;
-    border-radius: 5px;
-    background-color: #ff0000; /* Rojo */
+    border-radius: 8px;
+    background: linear-gradient(135deg, #8a2be2, #bb00ff);
     color: white;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 5px; /* Espacio entre los botones */
+    margin-left: 5px;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
 }
 
 .input-group button:hover {
-    background-color: #b30000; /* Rojo más oscuro al pasar el mouse */
+    background: linear-gradient(135deg, #7b1fa2, #9c27b0);
+    transform: translateY(-2px);
 }
 
+/* Áreas de Arrastrar/Soltar */
+#dropArea, #fontDropArea, #csDropArea {
+    border: 2px dashed rgba(187, 0, 255, 0.5);
+    border-radius: 10px;
+    padding: 30px 20px;
+    text-align: center;
+    margin: 20px 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#dropArea p, #fontDropArea p, #csDropArea p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+#dropArea button, #fontDropArea button, #csDropArea button {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #8a2be2, #bb00ff);
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+}
+
+#dropArea:hover, #fontDropArea:hover, #csDropArea:hover {
+    border-color: #bb00ff;
+    background-color: rgba(187, 0, 255, 0.1);
+}
+
+#dropArea.dragover, #fontDropArea.dragover, #csDropArea.dragover {
+    border-color: #bb00ff;
+    background-color: rgba(187, 0, 255, 0.2);
+    transform: scale(1.02);
+}
+
+/* Botones de Acción */
 .action-buttons {
-    margin-top: 20px;
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.action-buttons button {
-    padding: 10px 20px;
-    margin: 5px;
+.action-buttons button, #extractOffsetsButton, #clearCsButton {
+    padding: 12px 25px;
     border: none;
-    border-radius: 5px;
-    background-color: #ff0000; /* Rojo */
+    border-radius: 8px;
+    background: linear-gradient(135deg, #8a2be2, #bb00ff);
     color: white;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+    position: relative;
+    overflow: hidden;
 }
 
-.action-buttons button:hover {
-    background-color: #b30000; /* Rojo más oscuro al pasar el mouse */
+.action-buttons button::before, #extractOffsetsButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
 }
 
-.clear-button {
-    background-color: #dc3545; /* Rojo más claro */
+.action-buttons button:hover::before, #extractOffsetsButton:hover::before {
+    left: 100%;
 }
 
-.clear-button:hover {
-    background-color: #c82333; /* Rojo más oscuro */
+.action-buttons button:hover, #extractOffsetsButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(138, 43, 226, 0.6);
 }
 
-.dev-info {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #ffffff; /* Texto blanco */
+.clear-button, #clearCsButton, #clearImageButton, #clearFontButton {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b) !important;
+    box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4) !important;
 }
-.dev-info1{
-    margin-top: 20px;
-    font-size: 14px;
-    color: #ffffff; /* Texto blanco */
+
+.clear-button:hover, #clearCsButton:hover {
+    background: linear-gradient(135deg, #e53935, #d32f2f) !important;
 }
-#dropArea {
-    border: 2px dashed #ff0000; /* Rojo */
+
+/* Áreas de Resultados */
+.result-container, #csResult {
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.5);
     border-radius: 10px;
-    padding: 20px;
+    padding: 15px;
+    margin-top: 20px;
+    border: 1px solid rgba(187, 0, 255, 0.3);
+    text-align: left;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: monospace;
+    white-space: pre-wrap;
+    display: none;
+}
+
+.result-actions, #csActions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    display: none;
+}
+
+.result-actions button, #csActions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #8a2be2, #bb00ff);
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+}
+
+.result-actions button:hover, #csActions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(138, 43, 226, 0.6);
+}
+
+/* Previsualizaciones */
+.file-preview {
+    max-width: 100%;
+    max-height: 150px;
+    margin-top: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(187, 0, 255, 0.3);
+    display: none;
+}
+
+.file-info, #csFileInfo, #csStatus {
+    margin-top: 10px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    display: block;
     text-align: center;
-    margin: 20px 0;
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
-    cursor: pointer;
 }
 
-#dropArea p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #333;
+#csStatus {
+    color: #4CAF50;
+    font-style: italic;
 }
 
-#dropArea button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff0000; /* Rojo */
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-#dropArea button:hover {
-    background-color: #b30000; /* Rojo más oscuro */
-}
-
-#dropArea.dragover {
-    border-color: #b30000; /* Rojo más oscuro */
-    background-color: rgba(255, 0, 0, 0.1); /* Fondo rojo muy claro */
-}
-
-#clearImageButton, #convertImageButton {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff0000; /* Rojo */
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 5px; /* Espacio entre los botones */
-}
-
-#clearImageButton:hover, #convertImageButton:hover {
-    background-color: #b30000; /* Rojo más oscuro al pasar el mouse */
-}
-
-#fontDropArea {
-    border: 2px dashed #ff0000; /* Rojo */
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    margin: 20px 0;
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
-    cursor: pointer;
-}
-
-#fontDropArea p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #333;
-}
-
-#fontDropArea button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff0000; /* Rojo */
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-#fontDropArea button:hover {
-    background-color: #b30000; /* Rojo más oscuro */
-}
-
-#fontDropArea.dragover {
-    border-color: #b30000; /* Rojo más oscuro */
-    background-color: rgba(255, 0, 0, 0.1); /* Fondo rojo muy claro */
-}
-
-#clearFontButton, #convertFontButton {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #ff0000; /* Rojo */
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 5px; /* Espacio entre los botones */
-}
-
-#clearFontButton:hover, #convertFontButton:hover {
-    background-color: #b30000; /* Rojo más oscuro al pasar el mouse */
-}
-
+/* Color Picker */
 #colorPicker {
     width: 100%;
-    height: 50px;
+    height: 60px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     margin: 20px 0;
     cursor: pointer;
+    background: transparent;
+    box-shadow: 0 0 20px rgba(187, 0, 255, 0.3);
+}
+
+#colorPicker::-webkit-color-swatch {
+    border: none;
+    border-radius: 8px;
+}
+
+#colorPicker::-webkit-color-swatch-wrapper {
+    padding: 0;
 }
 
 #colorValues {
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente */
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 20px;
     border-radius: 10px;
     margin-top: 20px;
     text-align: left;
+    border: 1px solid rgba(187, 0, 255, 0.3);
 }
 
-#canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
 #colorValues p {
-    margin: 10px 0;
+    margin: 12px 0;
     font-size: 16px;
-    color: #333;
+    color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #colorValues strong {
-    color: #ff0000; /* Rojo */
+    color: #bb00ff;
+    margin-right: 10px;
 }
 
+.color-preview {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 10px;
+    border: 2px solid white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.preview-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.preview-box {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8a2be2, #bb00ff);
+    box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    word-break: break-all;
+}
+
+/* Botones de Copiar */
 .copyButton {
     background: none;
     border: none;
     cursor: pointer;
     margin-left: 10px;
-    padding: 0;
+    padding: 5px;
+    border-radius: 5px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    background-color: rgba(187, 0, 255, 0.2);
+}
+
+.copyButton:hover {
+    background-color: rgba(187, 0, 255, 0.4);
 }
 
 .copyButton img {
-    width: 20px;
-    height: 20px;
-    filter: invert(1); /* Cambia el color del ícono a blanco */
-    transition: filter 0.3s ease;
+    width: 16px;
+    height: 16px;
+    filter: invert(1);
 }
 
-.copyButton:hover img {
-    filter: invert(0.8); /* Cambia el color del ícono a gris claro al pasar el mouse */
+/* Inputs ocultos */
+input[type="file"] {
+    display: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(#8a2be2, #bb00ff);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bb00ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .converter-container {
+        padding: 20px 15px;
+    }
+    
+    .input-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .input-group input {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .input-group button {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+    
+    .action-buttons, .result-actions, #csActions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .action-buttons button, .result-actions button, #csActions button {
+        width: 100%;
+    }
+}
+
+/* Animaciones */
+.fade-in {
+    animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.pulse {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
     </style>
 </head>
 <body>
+    <canvas id="canvas"></canvas>
     
-<canvas id="canvas"></canvas>
-    <h1><font color="White">Dev Tools by CachorroMx</font></h1>
-    <br><br><br><br><br>
-    <div class="converter-container">
+    <h1>Dev Tools by RataLife</h1>
+    
+    <div class="converter-container" style="animation-delay: 0.1s">
         <h1>Code Converter</h1>
         <div class="input-group">
             <input type="text" placeholder="Input" id="inputField">
-            <button id="inputIconButton1"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTE2MCAwYy0yMy43IDAtNDQuNCAxMi45LTU1LjQgMzJINDhDMjEuNSAzMiAwIDUzLjUgMCA4MHYzMjBjMCAyNi41IDIxLjUgNDggNDggNDhoMTQ0VjE3NmMwLTQ0LjIgMzUuOC04MCA4MC04MGg0OFY4MGMwLTI2LjUtMjEuNS00OC00OC00OGgtNTYuNmMtMTEtMTkuMS0zMS43LTMyLTU1LjQtMzJtMTEyIDEyOGMtMjYuNSAwLTQ4IDIxLjUtNDggNDh2Mjg4YzAgMjYuNSAyMS41IDQ4IDQ4IDQ4aDE5MmMyNi41IDAgNDgtMjEuNSA0OC00OFYyNDMuOWMwLTEyLjctNS4xLTI0LjktMTQuMS0zMy45TDQzMCAxNDIuMWMtOS05LTIxLjItMTQuMS0zMy45LTE0LjF6TTE2MCA0MGEyNCAyNCAwIDEgMSAwIDQ4YTI0IDI0IDAgMSAxIDAtNDgiLz48L3N2Zz4=" alt="Icono 1" style="width: 20px; height: 20px;"></button>
-            <button id="inputIconButton2"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiIGQ9Ik00IDdoMTZtLTEwIDR2Nm00LTZ2Nk01IDdsMSAxMmEyIDIgMCAwIDAgMiAyaDhhMiAyIDAgMCAwIDItMmwxLTEyTTkgN1Y0YTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjMiLz48L3N2Zz4=" alt="Icono 2" style="width: 20px; height: 20px;"></button>
+            <button id="inputIconButton1" title="Paste"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Paste" style="width: 20px; height: 20px;"></button>
+            <button id="inputIconButton2" title="Clear"><img src="https://cdn-icons-png.flaticon.com/512/660/660252.png" alt="Clear" style="width: 20px; height: 20px;"></button>
         </div>
         <div class="input-group">
             <input type="text" placeholder="Output" id="outputField" readonly>
-            <button id="outputIconButton3"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik03IDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDkuNjY3IDdoOC42NjZBMi42NjcgMi42NjcgMCAwIDEgMjEgOS42Njd2OC42NjZBMi42NjcgMi42NjcgMCAwIDEgMTguMzMzIDIxSDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDcgMTguMzMzeiIvPjxwYXRoIGQ9Ik00LjAxMiAxNi43MzdBMiAyIDAgMCAxIDMgMTVWNWMwLTEuMS45LTIgMi0yaDEwYy43NSAwIDEuMTU4LjM4NSAxLjUgMSIvPjwvZz48L3N2Zz4=" alt="Icono 1" style="width: 20px; height: 20px;"></button>
-            <button id="outputIconButton4"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiIGQ9Ik00IDdoMTZtLTEwIDR2Nm00LTZ2Nk01IDdsMSAxMmEyIDIgMCAwIDAgMiAyaDhhMiAyIDAgMCAwIDItMmwxLTEyTTkgN1Y0YTEgMSAwIDAgMSAxLTFoNGExIDEgMCAwIDEgMSAxdjMiLz48L3N2Zz4=" alt="Icono 2" style="width: 20px; height: 20px;"></button>
+            <button id="outputIconButton3" title="Copy"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy" style="width: 20px; height: 20px;"></button>
+            <button id="outputIconButton4" title="Clear"><img src="https://cdn-icons-png.flaticon.com/512/660/660252.png" alt="Clear" style="width: 20px; height: 20px;"></button>
         </div>
         <div class="action-buttons">
             <button id="aobToByte">Aob to Byte</button>
             <button id="byteToAob">Byte to Aob</button>
             <button class="clear-button" id="clearAll">Clear All</button>
         </div>
-        <div class="dev-info">Dev by CachorroMx</div>
+        <div class="dev-info">Dev by RataLife</div>
     </div>
 
+    <div class="converter-container" style="animation-delay: 0.2s">
+        <h1>Image Converter</h1>
+        <div class="dev-info1">Dev by RataLife</div>
 
-<br><br><br><br><br>
+        <div id="dropArea">
+            <p>Drag or drop an image here</p>
+            <p>or</p>
+            <button id="addImageButton">Upload Image</button>
+            <img id="imagePreview" class="file-preview" alt="Image preview">
+            <div id="imageInfo" class="file-info"></div>
+        </div>
 
+        <div id="imageResult" class="result-container"></div>
+        <div id="imageActions" class="result-actions">
+            <button id="copyImageButton">Copy Byte</button>
+            <button id="downloadImageButton">Download File</button>
+        </div>
 
-<canvas id="canvas"></canvas>
-<div class="converter-container">
-    <h1>Image Converter</h1>
-    <div class="dev-info1">Dev by CachorroMx</div>
+        <button id="clearImageButton">Clean Image</button>
+        <button id="convertImageButton">Convert Image to Cpp</button>
 
-    <div id="dropArea">
-        <p>Drag or drop an image here</p>
-        <p>o</p>
-        <button id="addImageButton">Upload Image</button>
+        <input type="file" id="imageInput" accept="image/*" style="display: none;">
     </div>
 
-    <button id="clearImageButton">Clean Image</button>
-    <button id="convertImageButton">Convert Image to Cpp</button>
+    <div class="converter-container" style="animation-delay: 0.3s">
+        <h1>Font Converter</h1>
+        <div class="dev-info1">Dev by RataLife</div>
 
-    <input type="file" id="imageInput" accept="image/*" style="display: none;">
-</div>
+        <div id="fontDropArea">
+            <p>Drag or drop font (TTF/OTF)</p>
+            <p>or</p>
+            <button id="addFontButton">Upload Font</button>
+            <div id="fontInfo" class="file-info"></div>
+        </div>
 
-<br><br><br><br><br>
+        <div id="fontResult" class="result-container"></div>
+        <div id="fontActions" class="result-actions">
+            <button id="copyFontButton">Copy Byte</button>
+            <button id="downloadFontButton">Download File</button>
+        </div>
 
+        <button id="clearFontButton">Clear File</button>
+        <button id="convertFontButton">Convert Font to Cpp</button>
 
-<div class="converter-container">
-    <h1>Font Converter</h1>
-    <div class="dev-info1">Dev by CachorroMx</div>
-
-    <!-- Área para arrastrar y soltar la fuente -->
-    <div id="fontDropArea">
-        <p>Drag or drop font (TTF/OTF)</p>
-        <p>o</p>
-        <button id="addFontButton">Upload Font</button>
+        <input type="file" id="fontInput" accept=".ttf,.otf" style="display: none;">
     </div>
 
-    <!-- Botones adicionales -->
-    <button id="clearFontButton">Clear File</button>
-    <button id="convertFontButton">Convert Font to Cpp</button>
+    
+        
+    <div class="converter-container" style="animation-delay: 0.3s">
+        <h1>Dump FF Offset Extractor</h1>
+        <div class="dev-info1">Dev by RataLife</div>
 
-    <!-- Input para cargar la fuente (oculto) -->
-    <input type="file" id="fontInput" accept=".ttf,.otf" style="display: none;">
-</div>
+        <div id="csDropArea">
+            <p>Drag or drop a .cs file here</p>
+            <p>or</p>
+            <button id="addCsButton">Upload .cs File</button>
+            <div id="csFileInfo"></div>
+        </div>
 
-<br><br><br><br><br>
+        <div id="csStatus">No file loaded</div>
 
-<div class="converter-container">
-    <h1>Color Picker</h1>
-    <div class="dev-info">Dev by CachorroMx</div>
+        <button id="extractOffsetsButton">Extract Offsets</button>
+        <button id="clearCsButton">Clear File</button>
 
-    <!-- Input para seleccionar el color -->
-    <input type="color" id="colorPicker" value="#06746">
+        <div id="csResult"></div>
+        <div id="csActions">
+            <button id="copyCsButton">Copy Offsets</button>
+            <button id="downloadCsButton">Download File</button>
+        </div>
 
-    <!-- Contenedor para mostrar los valores de color -->
-    <div id="colorValues">
-        <p>
-            <strong>HEX:</strong> <span id="hexValue">#06746</span>
-            <button class="copyButton" data-target="hexValue"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik03IDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDkuNjY3IDdoOC42NjZBMi42NjcgMi42NjcgMCAwIDEgMjEgOS42Njd2OC42NjZBMi42NjcgMi42NjcgMCAwIDEgMTguMzMzIDIxSDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDcgMTguMzMzeiIvPjxwYXRoIGQ9Ik00LjAxMiAxNi43MzdBMiAyIDAgMCAxIDMgMTVWNWMwLTEuMS45LTIgMi0yaDEwYy43NSAwIDEuMTU4LjM4NSAxLjUgMSIvPjwvZz48L3N2Zz4=" alt="Copiar"></button>
-        </p>
-        <p>
-            <strong>RGB:</strong> <span id="rgbValue">6, 247, 70</span>
-            <button class="copyButton" data-target="rgbValue"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik03IDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDkuNjY3IDdoOC42NjZBMi42NjcgMi42NjcgMCAwIDEgMjEgOS42Njd2OC42NjZBMi42NjcgMi42NjcgMCAwIDEgMTguMzMzIDIxSDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDcgMTguMzMzeiIvPjxwYXRoIGQ9Ik00LjAxMiAxNi43MzdBMiAyIDAgMCAxIDMgMTVWNWMwLTEuMS45LTIgMi0yaDEwYy43NSAwIDEuMTU4LjM4NSAxLjUgMSIvPjwvZz48L3N2Zz4=" alt="Copiar"></button>
-        </p>
-        <p>
-            <strong>Float:</strong> <span id="rgbFloatValue">0.02, 0.97, 0.27</span>
-            <button class="copyButton" data-target="rgbFloatValue"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik03IDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDkuNjY3IDdoOC42NjZBMi42NjcgMi42NjcgMCAwIDEgMjEgOS42Njd2OC42NjZBMi42NjcgMi42NjcgMCAwIDEgMTguMzMzIDIxSDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDcgMTguMzMzeiIvPjxwYXRoIGQ9Ik00LjAxMiAxNi43MzdBMiAyIDAgMCAxIDMgMTVWNWMwLTEuMS45LTIgMi0yaDEwYy43NSAwIDEuMTU4LjM4NSAxLjUgMSIvPjwvZz48L3N2Zz4=" alt="Copiar"></button>
-        </p>
-        <p>
-            <strong>CMYK:</strong> <span id="cmykValue">88%, 0%, 72%, 3%</span>
-            <button class="copyButton" data-target="cmykValue"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik03IDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDkuNjY3IDdoOC42NjZBMi42NjcgMi42NjcgMCAwIDEgMjEgOS42Njd2OC42NjZBMi42NjcgMi42NjcgMCAwIDEgMTguMzMzIDIxSDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDcgMTguMzMzeiIvPjxwYXRoIGQ9Ik00LjAxMiAxNi43MzdBMiAyIDAgMCAxIDMgMTVWNWMwLTEuMS45LTIgMi0yaDEwYy43NSAwIDEuMTU4LjM4NSAxLjUgMSIvPjwvZz48L3N2Zz4=" alt="Copiar"></button>
-        </p>
-        <p>
-            <strong>HSV:</strong> <span id="hsvValue">100°, 68%, 87%</span>
-            <button class="copyButton" data-target="hsvValue"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik03IDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDkuNjY3IDdoOC42NjZBMi42NjcgMi42NjcgMCAwIDEgMjEgOS42Njd2OC42NjZBMi42NjcgMi42NjcgMCAwIDEgMTguMzMzIDIxSDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDcgMTguMzMzeiIvPjxwYXRoIGQ9Ik00LjAxMiAxNi43MzdBMiAyIDAgMCAxIDMgMTVWNWMwLTEuMS45LTIgMi0yaDEwYy43NSAwIDEuMTU4LjM4NSAxLjUgMSIvPjwvZz48L3N2Zz4=" alt="Copiar"></button>
-        </p>
-        <p>
-            <strong>HSL:</strong> <span id="hslValue">100°, 66%, 49%</span>
-            <button class="copyButton" data-target="hslValue"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjgiIGhlaWdodD0iMTI4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik03IDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDkuNjY3IDdoOC42NjZBMi42NjcgMi42NjcgMCAwIDEgMjEgOS42Njd2OC42NjZBMi42NjcgMi42NjcgMCAwIDEgMTguMzMzIDIxSDkuNjY3QTIuNjY3IDIuNjY3IDAgMCAxIDcgMTguMzMzeiIvPjxwYXRoIGQ9Ik00LjAxMiAxNi43MzdBMiAyIDAgMCAxIDMgMTVWNWMwLTEuMS45LTIgMi0yaDEwYy43NSAwIDEuMTU4LjM4NSAxLjUgMSIvPjwvZz48L3N2Zz4=" alt="Copiar"></button>
-        </p>
+        <input type="file" id="csInput" accept=".cs" style="display: none;"/>
     </div>
-</div>
-    <script>
-        document.getElementById('aobToByte').addEventListener('click', function() {
-    const inputField = document.getElementById('inputField');
-    const outputField = document.getElementById('outputField');
-    const devInfo = document.querySelector('.dev-info');
-
-    if (inputField.value === "") {
-        devInfo.textContent = "No codes to convert";
-        return;
-    }
-
-    let text = inputField.value.trim();
-    let array = text.split(/\s+/).filter(Boolean);
-    let list = [];
-    let flag = false;
-
-    array = array.map(item => item.toUpperCase());
-
-    for (let item of array) {
-        if (item.startsWith("0X") || item === "?" || item === "'?'") {
-            flag = true;
-            break;
-        }
-    }
-
-    if (flag) {
-        devInfo.textContent = "This text is already in BYTE format.";
-        return;
-    }
-    for (let item of array) {
-        if (item === "??" || item === "?") {
-            list.push("'?'");
-        } else {
-            list.push("0x" + item);
-        }
-    }
-
-    let result = list.join(", ");
-    outputField.value = result;
-    devInfo.textContent = "Text converted from AOB to BYTE successfully.";
-});
-
-//Clear All
-document.getElementById('clearAll').addEventListener('click', function() {
-    const inputField = document.getElementById('inputField');
-    const outputField = document.getElementById('outputField');
-    const devInfo = document.querySelector('.dev-info');
-    inputField.value = "";
-    outputField.value = "";
-    devInfo.textContent = "Dev by CachorroMx";
-});
-//Byte to AOb
-document.getElementById('byteToAob').addEventListener('click', function() {
-    const inputField = document.getElementById('inputField');
-    const outputField = document.getElementById('outputField');
-    const devInfo = document.querySelector('.dev-info');
-
-    if (inputField.value === "") {
-        devInfo.textContent = "No codes to convert";
-        return;
-    }
-
-    let text = inputField.value.trim();
-    let array = text.split(/[,\s]+/).filter(Boolean);
-    let result = "";
-
-    for (let item of array) {
-        if (item === "'?'") {
-            result += "?? ";
-        } else {
-            let str = item.replace(/^0x/i, ""); 
-            result += str + " ";
-        }
-    }
-
-    let aobText = result.trim();
-
-    if (aobText === text) {
-        devInfo.textContent = "This text is already in AOB format.";
-        return;
-    }
-    outputField.value = aobText;
-    devInfo.textContent = "Text converted from BYTE to AOB successfully.";
-});
-//Copy Text
-document.getElementById('outputIconButton3').addEventListener('click', function() {
-    const outputField = document.getElementById('outputField');
-    const devInfo = document.querySelector('.dev-info');
-
-    navigator.clipboard.writeText(outputField.value)
-        .then(() => {
-            devInfo.textContent = "Texto copiado al portapapeles"; // Mensaje de éxito
-        })
-        .catch(() => {
-            devInfo.textContent = "Error al copiar al portapapeles"; // Mensaje de error
-        });
-});
-
-//Clear OutPut
-document.getElementById('outputIconButton4').addEventListener('click', function() {
-    const inputField = document.getElementById('inputField');
-    const outputField = document.getElementById('outputField');
-    const devInfo = document.querySelector('.dev-info');
-    outputField.value = "";
-    devInfo.textContent = "Dev by CachorroMx";
-});
-//Clear InPut
-document.getElementById('inputIconButton2').addEventListener('click', function() {
-    const inputField = document.getElementById('inputField');
-    const outputField = document.getElementById('outputField');
-    const devInfo = document.querySelector('.dev-info');
-    inputField.value = "";
-    devInfo.textContent = "Dev by CachorroMx";
-});
-//Paste text
-document.getElementById("inputIconButton1").addEventListener("click", function() {
-    navigator.clipboard.readText().then(text => {
-        if (text) {
-            document.getElementById("inputField").value = text;
-        } else {
-            devInfo.textContent = "Portapapeles vacio";
-        }
-        devInfo.textContent = "Text copied succesfully";
-    }).catch(() => {
-        devInfo.textContent = "Dev by CachorroMx";
-    });
-});
-//Convert Image to byte
-// Referencias a los elementos del DOM
-const dropArea = document.getElementById('dropArea');
-const imageInput = document.getElementById('imageInput');
-const addImageButton = document.getElementById('addImageButton');
-const clearImageButton = document.getElementById('clearImageButton');
-const convertImageButton = document.getElementById('convertImageButton');
-
-// Variable para almacenar la imagen seleccionada
-let selectedImage = null;
-
-// Función para manejar la carga de la imagen
-addImageButton.addEventListener('click', () => {
-    imageInput.click(); // Abre el diálogo de selección de archivos
-});
-
-imageInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    handleImage(file);
-});
-
-// Función para manejar el arrastrar y soltar
-dropArea.addEventListener('dragover', (event) => {
-    event.preventDefault();
-    dropArea.classList.add('dragover');
-});
-
-dropArea.addEventListener('dragleave', () => {
-    dropArea.classList.remove('dragover');
-});
-
-dropArea.addEventListener('drop', (event) => {
-    event.preventDefault();
-    dropArea.classList.remove('dragover');
-    const file = event.dataTransfer.files[0];
-    handleImage(file);
-});
-
-// Función para procesar la imagen
-function handleImage(file) {
-    if (file && file.type.startsWith('image/')) {
-        selectedImage = file;
-    } else {
-        alert("Por favor, selecciona un archivo de imagen válido.");
-    }
-}
-
-// Función para limpiar la imagen
-clearImageButton.addEventListener('click', () => {
-    selectedImage = null;
-    imageInput.value = ""; // Limpia el input de archivo
-});
-
-// Función para convertir la imagen a texto
-convertImageButton.addEventListener('click', () => {
-    if (!selectedImage) {
-        alert("Por favor, carga una imagen antes de convertir.");
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const array = new Uint8Array(e.target.result); // Obtener los bytes de la imagen
-
-        // Crear el contenido del archivo de texto
-        let textContent = `Image Converter By CachorroMx\n`;
-        textContent += `Discord: https://discord.gg/hm8k3Cymsk\n`;
-        textContent += `-------------------------------------------------\n\n`;
-        textContent += `byte[] imageBytes = { `;
-
-        for (let i = 0; i < array.length; i++) {
-            textContent += `0x${array[i].toString(16).padStart(2, '0')}`;
-            if (i < array.length - 1) {
-                textContent += `, `;
-            }
-        }
-        textContent += ` };`;
-
-        // Crear y descargar el archivo de texto
-        const blob = new Blob([textContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'ImageConvertedByCachorroMx.txt';
-        a.click();
-        URL.revokeObjectURL(url);
-
-        alert("Archivo de texto creado y descargado. > 'Image.txt'");
-    };
-
-    reader.onerror = function () {
-        alert("Error al leer la imagen.");
-    };
-
-    reader.readAsArrayBuffer(selectedImage); // Leer la imagen como un array de bytes
-});
-
-//Font Converter
-// Referencias a los elementos del DOM
-const fontDropArea = document.getElementById('fontDropArea');
-const fontInput = document.getElementById('fontInput');
-const addFontButton = document.getElementById('addFontButton');
-const clearFontButton = document.getElementById('clearFontButton');
-const convertFontButton = document.getElementById('convertFontButton');
-const devInfo = document.querySelector('.dev-info');
-
-// Variable para almacenar la fuente seleccionada
-let selectedFont = null;
-
-// Función para manejar la carga de la fuente
-addFontButton.addEventListener('click', () => {
-    fontInput.click(); // Abre el diálogo de selección de archivos
-});
-
-fontInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    handleFont(file);
-});
-
-// Función para manejar el arrastrar y soltar
-fontDropArea.addEventListener('dragover', (event) => {
-    event.preventDefault();
-    fontDropArea.classList.add('dragover');
-});
-
-fontDropArea.addEventListener('dragleave', () => {
-    fontDropArea.classList.remove('dragover');
-});
-
-fontDropArea.addEventListener('drop', (event) => {
-    event.preventDefault();
-    fontDropArea.classList.remove('dragover');
-    const file = event.dataTransfer.files[0];
-    handleFont(file);
-});
-
-// Función para procesar la fuente
-function handleFont(file) {
-    if (file && (file.type === "font/ttf" || file.type === "font/otf" || file.name.endsWith('.ttf') || file.name.endsWith('.otf'))) {
-        selectedFont = file;
-    } else {
-        alert("Por favor, selecciona un archivo de fuente válido (TTF/OTF).");
-    }
-}
-
-// Función para limpiar la fuente
-clearFontButton.addEventListener('click', () => {
-    selectedFont = null;
-    fontInput.value = ""; // Limpia el input de archivo
-});
-
-// Función para convertir la fuente a texto
-convertFontButton.addEventListener('click', () => {
-    if (!selectedFont) {
-        alert("Por favor, carga una fuente antes de convertir.");
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const array = new Uint8Array(e.target.result); // Obtener los bytes de la fuente
-
-        // Crear el contenido del archivo de texto
-        let textContent = `Image Converter By CachorroMx\n`;
-        textContent += `Discord: https://discord.gg/hm8k3Cymsk\n`;
-        textContent += `-------------------------------------------------\n\n`;
-        textContent += `byte[] fontBytes = { `;
-
-        for (let i = 0; i < array.length; i++) {
-            textContent += `0x${array[i].toString(16).padStart(2, '0')}`;
-            if (i < array.length - 1) {
-                textContent += `, `;
-            }
-        }
-        textContent += ` };`;
-
-        // Crear y descargar el archivo de texto
-        const blob = new Blob([textContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'FontConverted.txt';
-        a.click();
-        URL.revokeObjectURL(url);
-
-        alert("Archivo de texto creado y descargado. > 'FontConverted.txt'");
-    };
-
-    reader.onerror = function () {
-        alert("Error al leer la fuente.");
-    };
-
-    reader.readAsArrayBuffer(selectedFont); // Leer la fuente como un array de bytes
-});
-
-//Color Picker
-// Referencias a los elementos del DOM
-const colorPicker = document.getElementById('colorPicker');
-const hexValue = document.getElementById('hexValue');
-const rgbValue = document.getElementById('rgbValue');
-const rgbFloatValue = document.getElementById('rgbFloatValue');
-const cmykValue = document.getElementById('cmykValue');
-const hsvValue = document.getElementById('hsvValue');
-const hslValue = document.getElementById('hslValue');
-
-// Función para convertir HEX a RGB
-function hexToRgb(hex) {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return { r, g, b };
-}
-
-// Función para convertir RGB a CMYK
-function rgbToCmyk(r, g, b) {
-    let c = 1 - (r / 255);
-    let m = 1 - (g / 255);
-    let y = 1 - (b / 255);
-    let k = Math.min(c, m, y);
-
-    c = (c - k) / (1 - k) || 0;
-    m = (m - k) / (1 - k) || 0;
-    y = (y - k) / (1 - k) || 0;
-
-    return {
-        c: Math.round(c * 100),
-        m: Math.round(m * 100),
-        y: Math.round(y * 100),
-        k: Math.round(k * 100)
-    };
-}
-
-// Función para convertir RGB a HSV
-function rgbToHsv(r, g, b) {
-    r /= 255, g /= 255, b /= 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s, v = max;
-
-    const d = max - min;
-    s = max === 0 ? 0 : d / max;
-
-    if (max === min) {
-        h = 0; // achromatic
-    } else {
-        switch (max) {
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
-        }
-        h /= 6;
-    }
-
-    return {
-        h: Math.round(h * 360),
-        s: Math.round(s * 100),
-        v: Math.round(v * 100)
-    };
-}
-
-// Función para convertir RGB a HSL
-function rgbToHsl(r, g, b) {
-    r /= 255, g /= 255, b /= 255;
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
-
-    if (max === min) {
-        h = s = 0; // achromatic
-    } else {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch (max) {
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
-        }
-        h /= 6;
-    }
-
-    return {
-        h: Math.round(h * 360),
-        s: Math.round(s * 100),
-        l: Math.round(l * 100)
-    };
-}
-
-// Función para actualizar los valores de color
-function updateColorValues(hex) {
-    const { r, g, b } = hexToRgb(hex);
-
-    // Mostrar valores HEX y RGB
-    hexValue.textContent = hex.toUpperCase();
-    rgbValue.textContent = `${r}, ${g}, ${b}`;
-// Mostrar valores RGB en flotantes
-const rFloat = (r / 255).toFixed(2);
-const gFloat = (g / 255).toFixed(2);
-const bFloat = (b / 255).toFixed(2);
-rgbFloatValue.textContent = `${rFloat}f, ${gFloat}f, ${bFloat}f`;
-
-    // Mostrar valores CMYK
-    const { c, m, y, k } = rgbToCmyk(r, g, b);
-    cmykValue.textContent = `${c}%, ${m}%, ${y}%, ${k}%`;
-
-    // Mostrar valores HSV
-    const { h: hHsv, s: sHsv, v: vHsv } = rgbToHsv(r, g, b);
-    hsvValue.textContent = `${hHsv}°, ${sHsv}%, ${vHsv}%`;
-
-    // Mostrar valores HSL
-    const { h: hHsl, s: sHsl, l: lHsl } = rgbToHsl(r, g, b);
-    hslValue.textContent = `${hHsl}°, ${sHsl}%, ${lHsl}%`;
-}
-
-// Evento para detectar cambios en el color seleccionado
-colorPicker.addEventListener('input', (event) => {
-    const selectedColor = event.target.value;
-    updateColorValues(selectedColor);
-});
-
-// Inicializar con el color por defecto
-updateColorValues(colorPicker.value);
-
-// Función para copiar el valor al portapapeles
-function copyToClipboard(button, text) {
-    navigator.clipboard.writeText(text)
-        .then(() => {
-            // Cambiar el color del botón a verde por 0.5 segundos
-            button.style.backgroundColor = "#4CAF50"; // Verde
-            setTimeout(() => {
-                button.style.backgroundColor = ""; // Restaurar el color original
-            }, 500); // 0.5 segundos
-        })
-        .catch(() => {
-            // Cambiar el color del botón a negro por 1 segundo
-            button.style.backgroundColor = "#000000"; // Negro
-            setTimeout(() => {
-                button.style.backgroundColor = ""; // Restaurar el color original
-            }, 1000); // 1 segundo
-        });
-}
-
-// Agregar evento a todos los botones de copiar
-document.querySelectorAll('.copyButton').forEach(button => {
-    button.addEventListener('click', () => {
-        const targetId = button.getAttribute('data-target');
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-            copyToClipboard(button, targetElement.textContent);
-        }
-    });
-});
-
-
-
-//Particulas de panel
-const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const particleCount = 500;
-        const drawCount = 90;
-        const particles = [];
-        const speedMultiplier = 5;
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = 15;
-                this.targetX = Math.random() * canvas.width;
-                this.targetY = canvas.height * 2;
-                this.speed = (Math.random() * 5 + 1) * speedMultiplier;
-                this.size = Math.random() * 8;
-                this.radius = Math.random() * 4;
-                this.rotation = 0;
-            }
-
-            update() {
-                const deltaTime = 1 / 120;
-                this.x += (this.targetX - this.x) * deltaTime * (this.speed / 60);
-                this.y += (this.targetY - this.y) * deltaTime * (this.speed / 60);
-                this.rotation += deltaTime;
-                if (this.y > canvas.height) {
-                    this.reset();
-                }
-            }
-
-            draw() {
-                const angle = (Math.PI * 2) / 3;
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation);
-                
-                for (let j = 0; j < 5; j++) {
-                    const alpha = 0.1 - j * 0.02;
-                    ctx.fillStyle = `rgba(255, 0, 0, ${alpha})`;
-                    ctx.beginPath();
-                    ctx.arc(0, 0, this.size + j * 2, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                
-                ctx.fillStyle = "rgb(255, 0, 0)";
-                ctx.beginPath();
-                for (let i = 0; i < 3; i++) {
-                    const x = this.size * Math.cos(this.rotation + i * angle);
-                    const y = this.size * Math.sin(this.rotation + i * angle);
-                    ctx.lineTo(x, y);
-                }
-                ctx.closePath();
-                ctx.fill();
-                ctx.restore();
-            }
-        }
-
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < drawCount; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
-            requestAnimationFrame(animate);
-        }
-
-        animate();
-
-
-
-
-
-    </script>
+<br>
+<br>
+
+    <div class="converter-container" style="animation-delay: 0.4s">
+        <h1>Color Picker</h1>
+        <div class="dev-info">Dev by RataLife</div>
+
+        <input type="color" id="colorPicker" value="#06746">
+        
+        <div class="preview-container">
+            <div class="preview-box" id="colorPreviewBox">Preview</div>
+        </div>
+
+        <div id="colorValues">
+            <p>
+                <strong>HEX:</strong> 
+                <span id="hexValue">#06746</span>
+                <span class="color-preview" id="hexPreview"></span>
+                <button class="copyButton" data-target="hexValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button>
+            </p>
+            <p>
+                <strong>RGBA:</strong> 
+                <span id="rgbaValue">6, 247, 70, 1</span>
+                <span class="color-preview" id="rgbaPreview"></span>
+                <button class="copyButton" data-target="rgbaValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button>
+            </p>
+            <p>
+                <strong>Float:</strong> 
+                <span id="rgbFloatValue">0.02, 0.97, 0.27</span>
+                <button class="copyButton" data-target="rgbFloatValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button>
+            </p>
+            <p>
+                <strong>CMYK:</strong> 
+                <span id="cmykValue">88%, 0%, 72%, 3%</span>
+                <button class="copyButton" data-target="cmykValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button>
+            </p>
+            <p>
+                <strong>HSV:</strong> 
+                <span id="hsvValue">100°, 68%, 87%</span>
+                <button class="copyButton" data-target="hsvValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button>
+            </p>
+            <p>
+                <strong>HSL:</strong> 
+                <span id="hslValue">100°, 66%, 49%</span>
+                <button class="copyButton" data-target="hslValue"><img src="https://cdn-icons-png.flaticon.com/512/7263/7263713.png" alt="Copy"></button>
+            </p>
+        </div>
+    </div>
+    <script src="scriipt.js"></script>
 </body>
 </html>
